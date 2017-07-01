@@ -8,7 +8,7 @@ namespace WikiApp.WikiApi
 {
     public static class WikiApi
     {
-        public static IList<Json.Geosearch.Geosearch> Geosearch(double latitude, double longitude)
+        public static IList<Geosearch> Geosearch(double latitude, double longitude)
         {
             var lat = latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture);
             var lng = longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture);
@@ -16,14 +16,14 @@ namespace WikiApp.WikiApi
             return Internal.Geosearch(lat, lng);
         }
 	    
-	    public static IDictionary<int, Json.Imagesearch.Page> Images(int pageid)
+	    public static IDictionary<int, Page> Images(int pageid)
 	    {
 		    var pid = pageid.ToString(System.Globalization.CultureInfo.InvariantCulture);
 		    
 	        return Internal.Images(pid);
         }
 
-        public static IDictionary<int, Json.Imagesearch.Page> Images(List<int> pageids)
+        public static IDictionary<int, Page> Images(IEnumerable<int> pageids)
         {
 	        string pids = string.Join("|", pageids.Select(p => p.ToString()));
 	        

@@ -23,6 +23,7 @@ namespace WikiApp
         {
 			var geopages = WikiApi.WikiApi.Geosearch(Latitude, Longitude);
             IStringMetric metric = new Levenstein();
+	        ITokenizer tokenizer = new Tokenizer();
 
 			foreach (var geopage in geopages)
 			{
@@ -32,7 +33,7 @@ namespace WikiApp
 				{
 					Console.WriteLine($"[{page.Pageid}] {page.Title}");
 
-					var imagesWithMetrics = page.Images.Select(i => i.CalcMetric(page.Title, metric)).ToList();
+					var imagesWithMetrics = page.Images.Select(i => i.CalcMetric(page.Title, tokenizer, metric)).ToList();
 					var bestTitle = imagesWithMetrics.Aggregate((image, next) => next.Similarity > image.Similarity ? next : image);
 
 					Console.WriteLine($"\t*[{bestTitle.Ns}] {bestTitle.Title} {bestTitle.Similarity}");

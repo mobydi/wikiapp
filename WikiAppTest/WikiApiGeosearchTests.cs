@@ -3,7 +3,7 @@ using WikiApp.WikiApi;
 
 namespace WikiAppTest
 {
-    public class WikiApiGeoTests
+    public class WikiApiGeosearchTests
     {
         [Fact]
         public void Should_Work()
