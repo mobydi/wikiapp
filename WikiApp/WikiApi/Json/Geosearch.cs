@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace WikiApp.WikiApi.Models.Geosearch
+namespace WikiApp.WikiApi.Json.Geosearch
 {
     public class Geosearch
     {
@@ -40,5 +40,8 @@ namespace WikiApp.WikiApi.Models.Geosearch
 
         [JsonProperty("query")]
         public Query Query { get; set; }
+        
+        [JsonProperty("error")]
+        public Error Error { get; set; }
     }
 }

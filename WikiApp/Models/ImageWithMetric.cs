@@ -1,12 +1,12 @@
-﻿using WikiApp.WikiApi.Models.Imagesearch;
+﻿using WikiApp.WikiApi.Json.Imagesearch;
 
 namespace WikiApp.Models
 {
-    class ImageWithMetric : Image
+    class ImageWithMetric
     {
-        public new int Ns { get; }
+        public int Ns { get; }
 
-        public new string Title { get;  }
+        public string Title { get;  }
 
         public double Similarity { get; }
 

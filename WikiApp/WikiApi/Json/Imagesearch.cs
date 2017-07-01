@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace WikiApp.WikiApi.Models.Imagesearch
+namespace WikiApp.WikiApi.Json.Imagesearch
 {
     public class Image
     {
@@ -26,6 +26,7 @@ namespace WikiApp.WikiApi.Models.Imagesearch
         [JsonProperty("images")]
         public List<Image> Images { get; set; }
     }
+    
     public class Query
     {
         [JsonProperty("pages")]
@@ -51,5 +52,8 @@ namespace WikiApp.WikiApi.Models.Imagesearch
 
         [JsonProperty("query")]
         public Query Query { get; set; }
+        
+        [JsonProperty("error")]
+        public Error Error { get; set; }
     }
 }
