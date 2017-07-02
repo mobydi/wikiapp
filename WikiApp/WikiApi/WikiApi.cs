@@ -41,7 +41,7 @@ namespace WikiApp.WikiApi
 		        var result = new Dictionary<int, Page>();
 		        var serializer = new JsonSerializer();
 
-		        var response = url.Get<Json.Imagesearch.Response>(serializer);
+		        var response = url.Get<Json.Imagesearch.Response>(serializer).Result;
 		        if (response.Error != null)
 			        throw new ApiException(response.Error.Code, response.Error.Info);
 		        
@@ -50,7 +50,7 @@ namespace WikiApp.WikiApi
 		        while (response.Continue != null)
 		        {
 			        string imurl = $"{url}&imcontinue={response.Continue.Imcontinue}";
-			        response = imurl.Get<Json.Imagesearch.Response>(serializer);    
+			        response = imurl.Get<Json.Imagesearch.Response>(serializer).Result;    
 			        if (response.Error != null)
 				        throw new ApiException(response.Error.Code, response.Error.Info);
 			        
@@ -64,7 +64,7 @@ namespace WikiApp.WikiApi
 		        string url = $"{Api}?action=query&list=geosearch&gsradius=10000&gscoord={lat}|{lng}&gslimit=50&format=json";
 
 		        JsonSerializer serializer = new JsonSerializer();
-		        var response = url.Get<Json.Geosearch.Response>(serializer);
+		        var response = url.Get<Json.Geosearch.Response>(serializer).Result;
 		        
 		        if (response.Error != null)
 			        throw new ApiException(response.Error.Code, response.Error.Info);

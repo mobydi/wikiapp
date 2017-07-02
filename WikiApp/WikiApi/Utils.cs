@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace WikiApp.WikiApi
@@ -30,14 +31,19 @@ namespace WikiApp.WikiApi
 
     internal static class Http
     {
-        internal static T Get<T>(this string url, JsonSerializer serializer)
+        internal static async Task<T> Get<T>(this string url, JsonSerializer serializer)
         {
             using (HttpClient client = new HttpClient())
-            using (Stream s = client.GetStreamAsync(url).Result)
-            using (StreamReader sr = new StreamReader(s))
-            using (JsonReader reader = new JsonTextReader(sr))
             {
-                return serializer.Deserialize<T>(reader);
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                
+                using (Stream streamAsync = await response.Content.ReadAsStreamAsync())
+                using (StreamReader sr = new StreamReader(streamAsync))
+                using (JsonReader reader = new JsonTextReader(sr))
+                {
+                    return serializer.Deserialize<T>(reader);
+                }
             }
         }
     }
