@@ -17,6 +17,17 @@ namespace WikiAppTest
         }
         
         [Fact]
+        public void Should_Work_Empty_With_Missing_Page()
+        {
+            const int pageid = 1;
+            var images = WikiApi.Images(pageid);
+            
+            Assert.NotNull(images);
+            Assert.NotEmpty(images);
+            Assert.Null(images[pageid].Images);
+        }
+        
+        [Fact]
         public void Should_Work_Multi_Page()
         {
             const int pageid1 = 40413203;

@@ -3,12 +3,14 @@ using WikiApp.WikiApi.Json.Imagesearch;
 
 namespace WikiApp.Models
 {
-    static class Utils
+    public static class Utils
     {
-        public static ImageWithMetric CalcMetric(this Image image, string title, ITokenizer tokenizer, IStringMetric metric)
+        public static double CalcMetric(this Image image, string title, ITokenizer tokenizer, IStringMetric metric)
         {
-            var similarity = metric.GetSimilarity(title.ToLower(), string.Join(" ", image.Title).ToLower());
-            return new ImageWithMetric(image, similarity);
+            var imageTitle = string.Join(" ", tokenizer.Tokenize(image.Title));
+            var similarity = metric.GetSimilarity(title.ToLower(), imageTitle.ToLower());
+            
+            return similarity;
         }
     }
 }

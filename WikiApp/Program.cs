@@ -13,37 +13,26 @@ namespace WikiApp
 
         static void Main(string[] args)
         {
-            Action(true);
-
-            Console.ReadLine();
-        }
-
-
-        static void Action(bool verbose)
-        {
-			var geopages = WikiApi.WikiApi.Geosearch(Latitude, Longitude);
-            IStringMetric metric = new Levenstein();
+	        IStringMetric metric = new Levenstein();
 	        ITokenizer tokenizer = new Tokenizer();
+	        
+	        var result = WikiApi.WikiApi.Geosearch(Latitude, Longitude)
+		        .AsParallel()
+		        .Select(p => new
+		        {
+			        Page = p,
+			        Title = WikiApi.WikiApi.Images(p.Pageid)[p.Pageid].Images
+				        .Select(image => new {Image = image, Similarity = image.CalcMetric(p.Title, tokenizer, metric)})
+				        .Aggregate((image, next) => next.Similarity > image.Similarity ? next : image)
+		        })
+		        .ToList();
 
-			foreach (var geopage in geopages)
-			{
-				var images = WikiApi.WikiApi.Images(geopage.Pageid);
-
-				foreach (var page in images.Values)
-				{
-					Console.WriteLine($"[{page.Pageid}] {page.Title}");
-
-					var imagesWithMetrics = page.Images.Select(i => i.CalcMetric(page.Title, tokenizer, metric)).ToList();
-					var bestTitle = imagesWithMetrics.Aggregate((image, next) => next.Similarity > image.Similarity ? next : image);
-
-					Console.WriteLine($"\t*[{bestTitle.Ns}] {bestTitle.Title} {bestTitle.Similarity}");
-
-					if (verbose)
-					{
-						imagesWithMetrics.ForEach(image => Console.WriteLine(string.Format("\t[{0}] {1} {2}", image.Ns, image.Title, image.Similarity)));
-					}
-				}
-			}
+	        foreach (var page in result)
+	        {
+		        Console.WriteLine($"[{page.Page.Pageid}] {page.Page.Title}");
+			
+		        Console.WriteLine($"\t Image title: [{page.Title.Image.Title}]");
+	        }
         }
     }
 }

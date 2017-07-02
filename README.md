@@ -1,15 +1,44 @@
-﻿#Exercise:
+﻿# Description
+
+##Solution
+* Keep solution simpe as posible 
+* Simpe tokenizer for Image Title only
+* No Stemmer, sorry
+* Levenstein distance or you can choose any in {SimMetrics.Net.Metric.*}
+* Have not implemented multipage api with |
+* Simple console UI 
+* Simple tests
+
+
+##Requirements 
+
+* .net core 1.1
+
+##How to build and run
+
+Navigate to WikiApp
+* Build it 
+```dotnet build ```
+* Run it 
+```dotnet run```
+* Navigate to WikiAppTest
+```dotnet test ```
+
+
+#Task 
+
+##Exercise:
 
 Use a pre-defined location (you can set that to whatever value you like) to get 50 English language
 Wikipedia articles nearest to that location. Find the most similar image titles used in those articles.
 
-#Requirements:
+##Requirements:
 - Use C# or F#
 - You can define yourself how to measure image title similarity
 - Present the results in a very simple UI. For example one text view with a list of most similar image titles.
 - Think this as a something that will be deployed to production. Pay attention to readability, modularity and maintainability.
 
-#Hints:
+##Hints:
 
 Get nearest 50 English Wikipedia articles by coordinates
 https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord=37.786971|-122.399677&gslimit=50&format=json
