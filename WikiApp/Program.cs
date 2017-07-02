@@ -10,19 +10,18 @@ namespace WikiApp
     {
         const double Latitude = 37.786971;
         const double Longitude = -122.399677;
+	    static readonly IStringMetric Metric = new Levenstein();
+	    static readonly ITokenizer Tokenizer = new Tokenizer();
 
         static void Main(string[] args)
         {
-	        IStringMetric metric = new Levenstein();
-	        ITokenizer tokenizer = new Tokenizer();
-	        
 	        var result = WikiApi.WikiApi.Geosearch(Latitude, Longitude)
 		        .AsParallel()
 		        .Select(p => new
 		        {
 			        Page = p,
-			        Title = WikiApi.WikiApi.Images(p.Pageid)[p.Pageid].Images
-				        .Select(image => new {Image = image, Similarity = image.CalcMetric(p.Title, tokenizer, metric)})
+			        Title = WikiApi.WikiApi.Images(p.Pageid)
+				        .Select(image => new {Image = image, Similarity = image.CalcMetric(p.Title, Tokenizer, Metric)})
 				        .Aggregate((image, next) => next.Similarity > image.Similarity ? next : image)
 		        })
 		        .ToList();
@@ -30,7 +29,7 @@ namespace WikiApp
 	        foreach (var page in result)
 	        {
 		        Console.WriteLine($"[{page.Page.Pageid}] {page.Page.Title}");
-			
+		        
 		        Console.WriteLine($"\t Image title: [{page.Title.Image.Title}]");
 	        }
         }

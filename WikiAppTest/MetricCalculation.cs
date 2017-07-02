@@ -32,25 +32,20 @@ namespace WikiAppTest
                 output.WriteLine($"[{geopage.Pageid}] {geopage.Title}");
 				
                 var images = WikiApi.Images(geopage.Pageid);
+           
+                var imagesWithMetrics = images
+                    .Select(image => new {Image = image, Similarity = image.CalcMetric(geopage.Title, tokenizer, metric)})
+                    .ToList();
+                var title = imagesWithMetrics.Aggregate((image, next) => next.Similarity > image.Similarity ? next : image);
 
-                foreach (var page in images.Values)
+                output.WriteLine($"\t*[{title.Image.Ns}] {title.Image.Title} {title.Similarity}");
+
+                foreach (var image in imagesWithMetrics)
                 {
-                    var imagesWithMetrics = page.Images
-                        .Select(image => new {Image = image, Similarity = image.CalcMetric(page.Title, tokenizer, metric)})
-                        .ToList();
-                    var title = imagesWithMetrics.Aggregate((image, next) => next.Similarity > image.Similarity ? next : image);
-
-                    output.WriteLine($"\t*[{title.Image.Ns}] {title.Image.Title} {title.Similarity}");
-
-                    foreach (var image in imagesWithMetrics)
-                    {
-                        output.WriteLine($"\t[{image.Image.Ns}] {image.Image.Title} {image.Similarity}");
-                    }
+                    output.WriteLine($"\t[{image.Image.Ns}] {image.Image.Title} {image.Similarity}");
                 }
             }
         }
-        
        
-        
     }
 }

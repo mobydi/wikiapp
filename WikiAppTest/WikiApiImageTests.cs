@@ -13,7 +13,6 @@ namespace WikiAppTest
             
             Assert.NotNull(images);
             Assert.NotEmpty(images);
-            Assert.NotEmpty(images[pageid].Images);
         }
         
         [Fact]
@@ -24,7 +23,6 @@ namespace WikiAppTest
             
             Assert.NotNull(images);
             Assert.NotEmpty(images);
-            Assert.Null(images[pageid].Images);
         }
         
         [Fact]

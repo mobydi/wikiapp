@@ -16,12 +16,12 @@ namespace WikiApp.WikiApi
             return Internal.Geosearch(lat, lng);
         }
 	    
-	    public static IDictionary<int, Page> Images(int pageid)
+	    public static IEnumerable<Image> Images(int pageid)
 	    {
 		    var pid = pageid.ToString(System.Globalization.CultureInfo.InvariantCulture);
 		    
-	        return Internal.Images(pid);
-        }
+	        return Internal.Images(pid)[pageid].Images ?? new List<Image>();
+	    }
 
         public static IDictionary<int, Page> Images(IEnumerable<int> pageids)
         {
@@ -38,7 +38,7 @@ namespace WikiApp.WikiApi
 	        {
 		        string url = $"{Api}?action=query&prop=images&pageids={pageid}&format=json";
 
-		        var result = new Dictionary<int, Json.Imagesearch.Page>();
+		        var result = new Dictionary<int, Page>();
 		        var serializer = new JsonSerializer();
 
 		        var response = url.Get<Json.Imagesearch.Response>(serializer);
