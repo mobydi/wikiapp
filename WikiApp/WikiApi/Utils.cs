@@ -7,22 +7,22 @@ namespace WikiApp.WikiApi
 {
     internal static class Utils
     {
-        internal static void Zip(this Dictionary<int, Json.Imagesearch.Page> dictionary, Dictionary<int, Json.Imagesearch.Page> with)
+        internal static void Zip(this Dictionary<int, Json.Imagesearch.Page> destination, Dictionary<int, Json.Imagesearch.Page> with)
         {
-            foreach (KeyValuePair<int, Json.Imagesearch.Page> keyValuePair in with)
+            foreach (var withPair in with)
             {
                 Json.Imagesearch.Page page;
-                if (dictionary.TryGetValue(keyValuePair.Key, out page))
+                if (destination.TryGetValue(withPair.Key, out page))
                 {
                     if (page.Images == null)
                         page.Images = new List<Json.Imagesearch.Image>();
 
-                    if (keyValuePair.Value.Images != null)
-                        page.Images.AddRange(keyValuePair.Value.Images);
+                    if (withPair.Value.Images != null)
+                        page.Images.AddRange(withPair.Value.Images);
                 }
                 else
                 {
-                    dictionary.Add(keyValuePair.Key, keyValuePair.Value);
+                    destination.Add(withPair.Key, withPair.Value);
                 }
             }
         }
