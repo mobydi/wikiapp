@@ -22,7 +22,7 @@ namespace WikiAppTest
             var images = WikiApi.Images(pageid);
             
             Assert.NotNull(images);
-            Assert.NotEmpty(images);
+            Assert.Empty(images);
         }
         
         [Fact]
